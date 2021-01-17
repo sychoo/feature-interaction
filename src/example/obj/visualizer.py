@@ -37,5 +37,6 @@ def main():
     visual.append("Ego Drone", exe_signal, pred_signals)
     visual.show()
 
-if __name__ == "__main__":
-    main()
+
+# if __name__ == "__main__":
+main()

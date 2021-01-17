@@ -1,0 +1,7 @@
+#!/bin/bash
+# initiate unit test module for STL API
+
+# store the directory where the user invoked the stl command
+cd $(dirname $0)/../
+
+python3 -m src.unit_test
