@@ -61,7 +61,9 @@ class Checkpoint_Mission:
 
     # TODO: predict, execute (loop refer to flight.py in old repo)
     def predict(self, step: int) -> Tuple[Signal, Signal]:  # return ego_drone_pred_signal, chaser_drone_pred_signal
-        """predict/estimate the future signal based on the """
+        """predict/estimate the future signal based on the current signals (represent information like heading (coord)
+        in hidden class varibles self._heading
+        """
         pass
 
     # TODO: start the execution loop, figure out a way to share data between drones, and use the STL_API to evaluate the properties defined.
@@ -69,6 +71,7 @@ class Checkpoint_Mission:
     def execute(self) -> list[Tuple[str, Signal, list[Signal]]]:
         """simulate runtime of the drone
         return the exe_signal and list of pred_signals for ego drone and chaser drone, respectively
+        invoke STL and predict function
         """
         pass
 
