@@ -60,7 +60,23 @@ def main():
     # print(exe_signal_chaser)
     # print(pred_signals_chaser)
 
-    visual = Visualizer(width=10, height=10)
+    ##########################
+    # create global messages #
+    ##########################
+
+    messages = list()
+    for i in range(total_steps):
+        if i % 2 == 0:  # case when i is even, No Conflict
+            messages.append("No Conflict")
+        else:
+            messages.append("Conflict Detected")
+
+
+    ############################
+    # initiated the visualizer #
+    ############################
+
+    visual = Visualizer(width=10, height=10, messages=messages)
     visual.append("Ego Drone", exe_signal_ego, pred_signals_ego)
     visual.append("Chaser Drone", exe_signal_chaser, pred_signals_chaser)
     visual.show()

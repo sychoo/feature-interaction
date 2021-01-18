@@ -1,6 +1,7 @@
 # Thu Jan 14 13:43:49 EST 2021
 # from stl.api import Signal
 # visualize the execution path and the predictive signals based on the signal and identifier provided.
+# issue: when running 2 visualizers, the matploblib cache/plot configuration may not be cleared
 
 from stl.api import Signal
 from typing import Tuple, Union, Optional
@@ -37,14 +38,18 @@ class Visualizer:
 
     def __init__(self, signal_data: list[Tuple[str, Signal, list[Signal]]] = list(),
                  width: Optional[int] = None,
-                 height: Optional[int] = None):  # initialize a fresh new list
+                 height: Optional[int] = None,
+                 messages: Optional[
+                     list[str]] = None):  # initialize a fresh new list, note that len(message) == len(signal)
         """
         initialize 2D signal visualizer, note that signal must have x and y entry
         """
         self.signal_data_val = signal_data
         self.width_val = width
         self.height_val = height
+        self.messages_val = messages
         self._counter = 0  # initialize the counter to 0, count the steps into the animation
+        self._counter_print = True
 
     def append(self, id_val: str, exe_signal: Signal, pred_signals: list[Signal]) -> None:
         """append (execution signal, predictive signal) pairs to the signal data
@@ -77,6 +82,14 @@ class Visualizer:
         return len(self.id_list)
 
     @property
+    def messages(self):
+        return self.messages_val
+
+    @messages.setter
+    def messages(self, messages: list[str]):
+        self.messages_val = messages
+
+    @property
     def id_list(self) -> list[str]:
         """signal id list """
         return list(map(lambda tuple_val: tuple_val[0], self.signal_data_val))
@@ -100,6 +113,7 @@ class Visualizer:
                         labeltop=True, length=0)
 
         # ax.lines = [exe_line_1, pred_line_1, exe_line_2, pred_line_2]
+
         for id_val in self.id_list:  # put the id as labels on the graph
             plt.plot([], [], label=id_val)  # drone exe signal label
             plt.plot([], [], label=id_val + " Prediction", linestyle="dashed")  # drone pred signal label
@@ -116,11 +130,29 @@ class Visualizer:
 
     # TODO: equivalent to animate_helper
     def animate(self, _):
-        # print("counter: " + str(self._counter))  # debug
+        if self._counter_print:
+            print("counter: " + str(self._counter))  # debug, printer counter
 
         ax = plt.gca()
 
-        for idx in range(0, len(self)):
+        ############################
+        # add message GUI elements #
+        ############################
+
+        if self.messages is not None and self._counter < len(self.messages):
+            # present message textbox on the upper left corner
+            text = "step #" + str(self._counter) + " " + self.messages[self._counter]  # debug
+
+            # alpha value for transparency
+            props = dict(boxstyle='round', facecolor='wheat', alpha=1.0)  # set style of the textbox
+            ax.text(0.05, 0.95, text, transform=ax.transAxes, fontsize=14,
+                    verticalalignment='top', bbox=props)
+
+        ###############################
+        # associate signals with axis #
+        ###############################
+
+        for idx in range(0, len(self)):  # loop through all drone results
             exe_line = ax.lines[idx * 2]  # the line for show execution signal of the drone
             pred_line = ax.lines[idx * 2 + 1]  # the line for the predictive signal of the drone
 
@@ -129,6 +161,12 @@ class Visualizer:
                 idx]  # the predictive signal corresponding to the line
 
             assert len(exe_signal) == len(pred_signals)
+
+            if self.messages is not None:  # ensure message list has the same length as the exe signals
+                assert len(exe_signal) == len(self.messages)
+
+            if self._counter > len(exe_signal):  # stop the counter print
+                self._counter_print = False
 
             if self._counter < len(exe_signal):  # prevent accessing signal elements that are out of bound
                 curr_exe_signal_begin = 0
@@ -157,9 +195,18 @@ class Visualizer:
 
     def start_animation(self):
         print("starting animation")  # debug
+
+        # note that the result of FuncAnimation must be assigned to a variable to initiate the animation
         animation = FuncAnimation(plt.gcf(), self.animate, interval=ANIMATION_REFRESH_INTERVAL)  # gcf: get curr figure
         plt.show()
+
+    @staticmethod
+    def reset():
+        plt.cla()
+        plt.clf()
+        plt.close()
 
     def show(self):
         self.init()
         self.start_animation()
+        self.reset()
