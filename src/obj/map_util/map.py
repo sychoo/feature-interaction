@@ -60,7 +60,7 @@ class Map:
         """diagonal length of the map"""
         return sqrt(self.width_val ** 2 + self.height_val ** 2)
 
-    def get_map_cell(self, coord: Coord):
+    def map_cell(self, coord: Coord):
         if not self.check_bound(coord):
             raise RuntimeError("index out of bound, unable to obtain map cell")
 
@@ -81,42 +81,42 @@ class Map:
         new_x_cor = x_cor
         new_y_cor = y_cor - 1
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["north"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["north"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor
         new_y_cor = y_cor + 1
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["south"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["south"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor + 1
         new_y_cor = y_cor
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["east"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["east"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor - 1
         new_y_cor = y_cor
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["west"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["west"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor + 1
         new_y_cor = y_cor - 1
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["northeast"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["northeast"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor + 1
         new_y_cor = y_cor + 1
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["southeast"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["southeast"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor - 1
         new_y_cor = y_cor + 1
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["southwest"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["southwest"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         new_x_cor = x_cor - 1
         new_y_cor = y_cor - 1
         if self.check_bound(Coord(new_x_cor, new_y_cor)):
-            neighbor_dict["northwest"] = self.get_map_cell(Coord(new_x_cor, new_y_cor))
+            neighbor_dict["northwest"] = self.map_cell(Coord(new_x_cor, new_y_cor))
 
         return neighbor_dict
 
