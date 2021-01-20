@@ -77,3 +77,9 @@ class Map_Cell:
 
     def __str__(self):
         return "Map Cell: ( " + str(self.x) + ", " + str(self.y) + " )"
+
+    # def __eq__(self, other):
+    #     if other is not None:
+    #         return self.x == other.x and self.y == other.y
+    #     else:
+    #         return False

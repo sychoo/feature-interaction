@@ -61,6 +61,7 @@ class Map:
         return sqrt(self.width_val ** 2 + self.height_val ** 2)
 
     def map_cell(self, coord: Coord):
+        """obtain the map cell from the map"""
         if not self.check_bound(coord):
             raise RuntimeError("index out of bound, unable to obtain map cell")
 
@@ -72,7 +73,12 @@ class Map:
         """check whether the coord is within the map boundaries"""
         return (0 <= coord.x < self.width) and (0 <= coord.y < self.height)
 
-    def find_neighbors_8(self, map_cell: Map_Cell):
+    def neighbor(self, map_cell: Map_Cell) -> list[Map_Cell]:
+        # TODO: implement in neighbor the algorithm, append "north" "south" labels in the def neighbor_dict(map_cell):
+        """obtain a list of neighbor map_cells"""
+        return list(self.find_neighbors_8(map_cell).values())
+
+    def find_neighbors_8(self, map_cell: Map_Cell) -> dict[str, Map_Cell]:
         neighbor_dict = dict()
 
         x_cor = map_cell.x

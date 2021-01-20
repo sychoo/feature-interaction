@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import numpy as np
 
-ANIMATION_REFRESH_INTERVAL = 400  # time between the animation is refreshed
+ANIMATION_REFRESH_INTERVAL = 2000  # time between the animation is refreshed
 
 
 class Visualizer:
@@ -145,6 +145,7 @@ class Visualizer:
 
             # alpha value for transparency
             props = dict(boxstyle='round', facecolor='wheat', alpha=1.0)  # set style of the textbox
+
             ax.text(0.05, 0.95, text, transform=ax.transAxes, fontsize=14,
                     verticalalignment='top', bbox=props)
 
@@ -160,7 +161,10 @@ class Visualizer:
             pred_signals: list[Signal] = self.pred_signal_lists[
                 idx]  # the predictive signal corresponding to the line
 
-            assert len(exe_signal) == len(pred_signals)
+            if len(exe_signal) != len(pred_signals):
+                raise RuntimeError("length inconsistent between execution signal and predictive signal\nlen("
+                                   "exe_signal)= " + str(len(exe_signal)) + ", len(pred_signal) = " + str(len(
+                    pred_signals)))
 
             if self.messages is not None:  # ensure message list has the same length as the exe signals
                 assert len(exe_signal) == len(self.messages)
@@ -195,9 +199,16 @@ class Visualizer:
 
     def start_animation(self):
         print("starting animation")  # debug
-
+        if self.messages is not None:
+            print("message received!")
         # note that the result of FuncAnimation must be assigned to a variable to initiate the animation
         animation = FuncAnimation(plt.gcf(), self.animate, interval=ANIMATION_REFRESH_INTERVAL)  # gcf: get curr figure
+
+        # set figure size
+        fig = plt.gcf()
+        fig.set_size_inches(13, 13)
+
+
         plt.show()
 
     @staticmethod

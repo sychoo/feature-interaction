@@ -19,10 +19,10 @@ def main():
     map_width: int = 20
     map_height: int = 20
 
-    ego_init_loc: Coord = Coord(0, 10)
-    chaser_init_loc: Coord = Coord(0, 0)
+    ego_init_loc: Coord = Coord(1, 10)
+    chaser_init_loc: Coord = Coord(1, 1)
 
-    checkpoints: list[Coord] = [Coord(10, 20), Coord(20, 0)]
+    checkpoints: list[Coord] = [Coord(10, 19), Coord(19, 1)]
 
     ####################
     # initiate mission #

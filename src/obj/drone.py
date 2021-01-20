@@ -4,7 +4,7 @@
 # TODO: refactor the code below
 
 from typing import Optional
-from src.obj.map import Coord
+from src.obj.map import Map_Cell, Map
 
 
 class Drone:
@@ -20,10 +20,17 @@ class Drone:
         False
         >>> d.loc = Coord(5, 0)
         RuntimeError("cannot assign drone to coordinates other than the current neighbors")
+
+    Attributes:
+        self.id_val: identification string of the drone
+        self.loc_val: the location of the drone (Map_Cell)
+        self.map_val: the map associated with the drone
     """
-    def __init__(self, id_val: str):
-        self.id_val = id_val
-        self.loc_val: Optional[Coord] = None
+    def __init__(self, id: str, map: Map, init_loc: Map_Cell):
+        self.id_val = id
+        self.map_val: Map = map
+        self.loc_val: Map_Cell = init_loc
+
 
     #######################
     # getters and setters #
@@ -42,14 +49,21 @@ class Drone:
         return self.loc_val
 
     @loc.setter
-    def loc(self, coord: Coord):
+    def loc(self, map_cell: Map_Cell):
         if self.loc_val is None:
-            self.loc_val = coord
-        elif coord in self.loc_val.neighbor:
-            self.loc_val = coord
+            self.loc_val = map_cell
+        elif map_cell in self.map_val.neighbor(self.loc_val) or map_cell == self.loc_val:  # the next coordinate can be itself
+            self.loc_val = map_cell
         else:
             raise RuntimeError("cannot assign drone to coordinates other than the current neighbors")
 
+    @property
+    def map(self):
+        return self.map_val
+
+    @map.setter
+    def map(self, map_val: Map):
+        self.map_val = map_val
 
 
 # class Drone(metaclass=abc.ABCMeta):

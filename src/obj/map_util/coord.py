@@ -38,7 +38,7 @@ class Coord:
 
     @property
     def neighbor(self) -> list['Coord']:
-        """return list of 8 neighbors around the coordinates"""
+        """return list of 8 (surrounding) neighbors around the coordinates"""
         result = [
             Coord(self.x - 1, self.y - 1),
             Coord(self.x - 1, self.y),
@@ -54,7 +54,7 @@ class Coord:
 
     def distance_to(self, other: 'Coord') -> float:
         """calculate the distance between 2 coordinates"""
-        return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
+        return sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
 
     def __eq__(self, other):
         if other is not None:
